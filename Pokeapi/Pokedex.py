@@ -21,15 +21,17 @@ def main(page):
         width=350,
         height=170
     )
-
+    page.title = "POKEDEX WITH POKEAPI by JhonmaSG GitHub"
     # Configura el tamaño de la ventana
-    page.window_width = 550       # window's width is 500 px
-    page.window_height = 750      # window's height is 600 px
+    page.window_width = 550       # window's width is 550 px
+    page.window_height = 750      # window's height is 750 px
     page.update()
 
     # Alinea todos los controles en el centro
+    #page.vertical_alignment = "center"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    
 
     nombre = ft.TextField(label="Nombre", autofocus=True)
     submit = ft.ElevatedButton("Consultar")
@@ -45,51 +47,66 @@ def main(page):
 
     #Lógica de consulta a la API
     def btn_click(e):
-        api_url_pokemon = f'https://pokeapi.co/api/v2/pokemon/{nombre.value}'
-        result = requests.get(api_url_pokemon)
+        try:
+            api_url_pokemon = f'https://pokeapi.co/api/v2/pokemon/{nombre.value}'
+            result = requests.get(api_url_pokemon)
 
-        # Muestra la animación de carga
-        loading.visible = True
-        page.update()
+            # Muestra la animación de carga
+            loading.visible = True
+            page.update()
 
-        # Tiempo de espera
-        def delay():
-            start_time = time.time()
-            while time.time() - start_time < 0.25:
-                pass
-        
-        # Ejecuta la función de retraso en un nuevo hilo
-        threading.Thread(target=delay).start()
+            # Tiempo de espera
+            def delay():
+                start_time = time.time()
+                while time.time() - start_time < 0.25:
+                    pass
+            
+            # Ejecuta la función de retraso en un nuevo hilo
+            threading.Thread(target=delay).start()
 
-        if result.status_code == 200:
-            pokemon_data = result.json()
-            url_image = pokemon_data['sprites']['other']['official-artwork']['front_default']
-            im = Image.open(urlopen(url_image)) #Se Accede a la imagen de la URL
+            if result.status_code == 200:
+                pokemon_data = result.json()
+                url_image = pokemon_data['sprites']['other']['official-artwork']['front_default']
+                im = Image.open(urlopen(url_image)) #Se Accede a la imagen de la URL
 
-            buffer = BytesIO()  #Almacenamos el buffer creado y convertir a base64
-            im.save(buffer, format="png")
-            image_base64 = base64.b64encode(buffer.getvalue()).decode()
+                buffer = BytesIO()  #Almacenamos el buffer creado y convertir a base64
+                im.save(buffer, format="png")
+                image_base64 = base64.b64encode(buffer.getvalue()).decode()
 
-            pokemon_image.src_base64 = image_base64
-            pokemon_image.update()
-        else:
-            print("No se encontro el pokemon")
-            # Muestra un mensaje de alerta
+                pokemon_image.src_base64 = image_base64
+                pokemon_image.update()
+            else:
+                #print("No se encontro el pokemon")
+                # Muestra un mensaje de alerta
+                def close_dlg(e):
+                    dlg.open = False
+                    page.update()
+
+                dlg = ft.AlertDialog(
+                    content=ft.Text("No se encontró el Pokémon"),
+                    actions=[ft.TextButton("OK", on_click=lambda e: close_dlg(e))]
+                )
+                page.dialog = dlg
+                dlg.open = True
+                page.update()
+        except Exception as e:
+            print("Ha ocurrido un error: ", str(e))
+            # Mensaje de alerta
             def close_dlg(e):
                 dlg.open = False
                 page.update()
 
             dlg = ft.AlertDialog(
-                content=ft.Text("No se encontró el Pokémon"),
+                content=ft.Text("Ha ocurrido un error: " + str(e)),
                 actions=[ft.TextButton("OK", on_click=lambda e: close_dlg(e))]
             )
             page.dialog = dlg
             dlg.open = True
             page.update()
-
-        # Oculta el indicador de carga
-        loading.visible = False
-        page.update()
+        finally:
+            # Oculta el indicador de carga
+            loading.visible = False
+            page.update()
     
     column = ft.Column([
         submit,
