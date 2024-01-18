@@ -80,7 +80,22 @@ while not done:
     # Orden Estricto: update, fill and sprite
     all_sprite_list.update()
 
-    
+    # Colisiones: iterar en la lista de los laseres
+    for laser in laser_list:
+        # "Condicion" (laser y la lista de meteoro)
+        meteor_hit_list = pygame.sprite.spritecollide(laser, meteor_list, True)
+        for meteor in meteor_hit_list:
+            all_sprite_list.remove(laser)
+            laser_list.remove(laser)
+            score += 1
+            print(score)
+            if score >= max_score:
+                print('Has Ganado')
+                pygame.quit()
+        # Liberacion de recursos de la maquina (laser al rebasar el limite de la screen)
+        if laser.rect.y < -10 :
+            all_sprite_list.remove(laser)
+            laser_list.remove(laser)
 
 
     screen.fill(WHITE)
