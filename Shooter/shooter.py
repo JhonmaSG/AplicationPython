@@ -59,23 +59,33 @@ for i in range(max_score):
     # Agregar a List_sprite
     meteor_list.add(meteor)
     all_sprite_list.add(meteor)
+
 #Creacion instancia
 player = Player()
 all_sprite_list.add(player)
+
+#Implements sound and keys
+#load sound
+sound = pygame.mixer.Sound(r'C:\Users\Jhon\Documents\Visual Studio Code\Python\AplicationPython\Shooter\laser5.ogg')
 
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-        # pos del laser
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            laser = Laser()
-            # pos de la nave + 45 px : center
-            laser.rect.x = player.rect.x + 45
-            laser.rect.y = player.rect.y - 40
+        # Logica de teclas y sonido
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                player.changespeed(-3)
+            if event.key == pygame.K_RIGHT:
+                player.changespeed(3)
+            if event.key == pygame.K_SPACE:
+                laser = Laser()
+                # pos de la nave + 45 px : center
+                laser.rect.x = player.rect.x + 45
+                laser.rect.y = player.rect.y - 40
 
-            all_sprite_list.add(laser)
-            laser_list.add(laser)
+                all_sprite_list.add(laser)
+                laser_list.add(laser)
             
     # Orden Estricto: update, fill and sprite
     all_sprite_list.update()
@@ -96,7 +106,6 @@ while not done:
         if laser.rect.y < -10 :
             all_sprite_list.remove(laser)
             laser_list.remove(laser)
-
 
     screen.fill(WHITE)
     all_sprite_list.draw(screen)
