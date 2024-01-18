@@ -54,7 +54,7 @@ clock = pygame.time.Clock()
 done = False
 max_score = 20
 score = 0
-
+game_over = False
 
 #Lista de Sprites, deteccion
 all_sprite_list = pygame.sprite.Group()
@@ -121,7 +121,7 @@ while not done:
             score += 1
             print(score)
             if score >= max_score:
-                print('Has Ganado')
+                print('Has Salvado al mundo')
                 pygame.quit()
         # Liberacion de recursos de la maquina (laser al rebasar el limite de la screen)
         if laser.rect.y < -10 :
