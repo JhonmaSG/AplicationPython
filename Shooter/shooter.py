@@ -9,11 +9,18 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load(r'C:\Users\Jhon\Documents\Visual Studio Code\Python\AplicationPython\Shooter\player.png').convert()
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
+        self.speed_x = 0
+        self.speed_y = 0
+    
     #Mover el Jugador
+    def changespeed(self, x):
+        self.speed_x += x
+    
     def update(self):
-        mouse_pos = pygame.mouse.get_pos()
-        player.rect.x = mouse_pos[0] - 50
+        #mouse_pos = pygame.mouse.get_pos()
+        self.rect.x += self.speed_x
         player.rect.y = 510 #Coordenada fija, Vertical
+    
 
 class Meteor(pygame.sprite.Sprite):
     def __init__(self):
@@ -33,12 +40,16 @@ class Laser(pygame.sprite.Sprite):
 
     def update(self):
         # Velocidad del laser: lento 1 - rapido > 5
-        self.rect.y -= 5
+        self.rect.y -= 4
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
+
 pygame.init()
-screen = pygame.display.set_mode([900, 600])
+
+SCREEN_WIDTH = 900
+SCREEN_HEIGHT = 600
+screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 clock = pygame.time.Clock()
 done = False
 max_score = 20
@@ -53,8 +64,8 @@ laser_list = pygame.sprite.Group()
 # # meteor
 for i in range(max_score):
     meteor = Meteor()
-    meteor.rect.x = random.randrange(880)
-    meteor.rect.y = random.randrange(450)
+    meteor.rect.x = random.randrange(SCREEN_WIDTH - 50)
+    meteor.rect.y = random.randrange(SCREEN_HEIGHT - 150)
 
     # Agregar a List_sprite
     meteor_list.add(meteor)
@@ -65,14 +76,16 @@ player = Player()
 all_sprite_list.add(player)
 
 #Implements sound and keys
-#load sound
+#load sound : .ogg .wav .....
 sound = pygame.mixer.Sound(r'C:\Users\Jhon\Documents\Visual Studio Code\Python\AplicationPython\Shooter\laser5.ogg')
+
+#########################
 
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-        # Logica de teclas y sonido
+        # Logic Sound
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 player.changespeed(-3)
@@ -84,8 +97,16 @@ while not done:
                 laser.rect.x = player.rect.x + 45
                 laser.rect.y = player.rect.y - 40
 
-                all_sprite_list.add(laser)
                 laser_list.add(laser)
+                all_sprite_list.add(laser)
+                sound.play()
+            
+        #Logic Controller keyboard Arrows left and right
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                player.changespeed(3)
+            if event.key == pygame.K_RIGHT:
+                player.changespeed(-3)
             
     # Orden Estricto: update, fill and sprite
     all_sprite_list.update()
