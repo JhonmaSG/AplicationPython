@@ -49,28 +49,21 @@ def dibujar_x(fila, col):
 def dibujar_o(fila, col):
     screen.blit(circulo, coor[fila][col])
 
-#Definicion logica turns and X/Y
-def add_XO(coor, tablero, to_move):
-    position_pos = pygame.mouse.get_pos()
-    #convertion Comming soon
-    converted_x = (position_pos[0]-65)/835*2
-    converted_y = position_pos[1]/835*2
-    if coor[round(converted_y)][round(converted_x)] != 'O' and coor[round(converted_y)][round(converted_x)] != 'X':
-        coor[round(converted_y)][round(converted_x)] = to_move
-        if to_move == 'O':
-            to_move = 'X'
-        else:
-            to_move = 'O'
-    
-def pos_mouse():
-    return pygame.mouse.get_pos()
-
 while not game_over:
-    clock.tick(10)  #30 FPS
+    clock.tick(30)  #30 FPS
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_over = True
-    print('PosMouse',pos_mouse())
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouseX, mouseY = event.pos
+            #print(mouseX, mouseY)
+            if (mouseX >= 40 and mouseX < 400) and \
+                (mouseY >= 35 and mouseY < 410):
+                fila = (mouseY - 35) // 125
+                col = (mouseX - 40)  // 125
+                if tablero[fila][col] == '':
+                    tablero[fila][col] = turno
+                    turno = 'O' if turno == 'X' else 'X'
     graficar_board()
     pygame.display.update()
 
