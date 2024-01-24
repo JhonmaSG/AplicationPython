@@ -63,7 +63,7 @@ while not game_over:
                 col = (mouseX - 40)  // 125
                 if tablero[fila][col] == '':
                     tablero[fila][col] = turno
-                    turno = 'O' if turno == 'X' else 'X'
+                    turno = 'O' if turno == 'X' else 'X'    #Condicional Ternario
     graficar_board()
     pygame.display.update()
 
