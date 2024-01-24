@@ -17,6 +17,6 @@ def reverse_list(lista):
         fin -= 1
     return lista
 
-lista_original =  [1, 2, 3, 4, 5, 6]
+lista_original =  [1, 2, 3, 4, 5, 6, 7, 8]
 print(lista_original)
 print(reverse_list(lista_original))
