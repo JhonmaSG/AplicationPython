@@ -2,7 +2,7 @@
 
 def max_de_tres(num1, num2, num3):
     if num1 == num2 == num3:
-        return "Son iguales"
+        raise Exception("Son iguales")
     elif num1 > num2 and num1 > num3:
         return num1
     elif num2 > num1 and num2 > num3:
@@ -11,7 +11,7 @@ def max_de_tres(num1, num2, num3):
         return num3
 num1 = 1
 num2 = 5
-num3 = 9
+num3 = 2
 print("Num1:",num1)
 print("Num2:",num2)
 print("Num3:",num3)
