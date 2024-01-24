@@ -1,5 +1,6 @@
 #Shooter Galaga for python
 #JhonmaSG
+#2024
 import pygame, random
 
 BLACK = (0, 0, 0)
