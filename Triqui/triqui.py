@@ -49,21 +49,36 @@ def dibujar_x(fila, col):
 def dibujar_o(fila, col):
     screen.blit(circulo, coor[fila][col])
 
+def verificar_ganador():
+    for i in range(3):
+        if tablero[i][0] == tablero[i][1] == tablero[i][2] != '':
+            return True #Horizontal
+        if tablero[0][i] == tablero[1][i] == tablero[2][i]:
+            return True #Vertical
+    #Diagonal
+    if tablero[0][0] == tablero[1][1] == tablero[2][2] != '':
+        return True
+    if tablero[0][2] == tablero[1][1] == tablero[2][0] != '':
+        return True
+    return False
+
 while not game_over:
     clock.tick(30)  #30 FPS
-    for event in pygame.event.get():
+    for event in pygame.event.get(): #Detección de un evento
         if event.type == pygame.QUIT:
             game_over = True
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pygame.MOUSEBUTTONDOWN: #Evento de un click Mouse
             mouseX, mouseY = event.pos
             #print(mouseX, mouseY)
+            
             if (mouseX >= 40 and mouseX < 400) and \
-                (mouseY >= 35 and mouseY < 410):
+                (mouseY >= 35 and mouseY < 410):    #Limitación de rango Triqui
                 fila = (mouseY - 35) // 125
                 col = (mouseX - 40)  // 125
-                if tablero[fila][col] == '':
+                if tablero[fila][col] == '': # Si esta vacio, Agregar caracter del turno
                     tablero[fila][col] = turno
-                    turno = 'O' if turno == 'X' else 'X'    #Condicional Ternario
+                    
+                    turno = 'O' if turno == 'X' else 'X'    #Condicional Ternario, Cambio de Turno
     graficar_board()
     pygame.display.update()
 
