@@ -77,7 +77,10 @@ while not game_over:
                 col = (mouseX - 40)  // 125
                 if tablero[fila][col] == '': # Si esta vacio, Agregar caracter del turno
                     tablero[fila][col] = turno
-                    
+                    fin_juego = verificar_ganador()
+                    if fin_juego:
+                        print("El jugador", turno, "Ha ganado!")
+                        game_over = True
                     turno = 'O' if turno == 'X' else 'X'    #Condicional Ternario, Cambio de Turno
     graficar_board()
     pygame.display.update()
