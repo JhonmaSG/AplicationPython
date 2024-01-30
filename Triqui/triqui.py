@@ -69,6 +69,7 @@ def game_main():
     
     #Show text on screen: Winner or Draw
     def show_text_screen(turno, fin_juego):
+        time.sleep(1) # Espera 1 segundos
         font = pygame.font.Font(None, 36) # Crea una fuente
         if fin_juego:
             text = font.render("El jugador " + turno + " ha ganado!", 1, (10, 10, 10)) # Renderiza el texto
@@ -79,7 +80,7 @@ def game_main():
         screen.fill((255, 255, 255)) # Cambia el fondo a blanco
         screen.blit(text, text_rect) # Dibuja el texto en la pantalla
         pygame.display.update() # Actualiza la pantalla
-        time.sleep(3) # Espera 3 segundos
+        time.sleep(2) # Espera 3 segundos
 
     #Verifica el tablero si todas las casillas estan llenas
     def verificar_tablero():
@@ -110,6 +111,9 @@ def game_main():
                         tablero[fila][col] = turno
                         fin_juego = verificar_ganador()
                         reset_game = verificar_tablero()
+                        graficar_board()
+                        pygame.display.update()
+                        
                         if fin_juego:
                             show_text_screen(turno, fin_juego)
                             print("El jugador (", turno, ") Ha ganado!")
