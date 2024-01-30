@@ -1,8 +1,10 @@
-import pygame
+import pygame, time
 
 def game_main():
     #Inicializamos un Motor
     pygame.init()
+    #screen white
+    
     #Dimensiones de la pantalla
     screen = pygame.display.set_mode((450,450))
     #Nombre de la ventana
@@ -51,6 +53,7 @@ def game_main():
     def dibujar_o(fila, col):
         screen.blit(circulo, coor[fila][col])
 
+    #Verifica el ganador horizontales, verticales y diagonales
     def verificar_ganador():
         for i in range(3):
             if tablero[i][0] == tablero[i][1] == tablero[i][2] != '':
@@ -64,6 +67,21 @@ def game_main():
             return True
         return False
     
+    #Show text on screen: Winner or Draw
+    def show_text_screen(turno, fin_juego):
+        font = pygame.font.Font(None, 36) # Crea una fuente
+        if fin_juego:
+            text = font.render("El jugador " + turno + " ha ganado!", 1, (10, 10, 10)) # Renderiza el texto
+        else:
+            text = font.render("¡Empate!", 1, (10, 10, 10)) # Renderiza el texto
+        text_rect = text.get_rect(center=(screen.get_width() / 2, screen.get_height() / 2)) # Obtiene el rectángulo de texto
+
+        screen.fill((255, 255, 255)) # Cambia el fondo a blanco
+        screen.blit(text, text_rect) # Dibuja el texto en la pantalla
+        pygame.display.update() # Actualiza la pantalla
+        time.sleep(3) # Espera 3 segundos
+
+    #Verifica el tablero si todas las casillas estan llenas
     def verificar_tablero():
         cont = 0
         for i in range(3):
@@ -79,6 +97,7 @@ def game_main():
         for event in pygame.event.get(): #Detección de un evento
             if event.type == pygame.QUIT:
                 game_over = True
+                return True
             elif event.type == pygame.MOUSEBUTTONDOWN: #Evento de un click Mouse
                 mouseX, mouseY = event.pos
                 #print(mouseX, mouseY)
@@ -92,10 +111,12 @@ def game_main():
                         fin_juego = verificar_ganador()
                         reset_game = verificar_tablero()
                         if fin_juego:
+                            show_text_screen(turno, fin_juego)
                             print("El jugador (", turno, ") Ha ganado!")
                             game_over = True
                             return True
-                        elif reset_game:
+                        elif reset_game:    #Reset de partida al Empatar
+                            show_text_screen(turno, fin_juego)
                             print("Empate!")
                             return False
                         turno = 'O' if turno == 'X' else 'X'    #Condicional Ternario, Cambio de Turno
@@ -105,5 +126,4 @@ def game_main():
 reset_triqui = False
 while not reset_triqui:
     reset_triqui = game_main()
-
 pygame.quit()
