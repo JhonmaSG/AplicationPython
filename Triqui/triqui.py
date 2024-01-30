@@ -53,7 +53,7 @@ def verificar_ganador():
     for i in range(3):
         if tablero[i][0] == tablero[i][1] == tablero[i][2] != '':
             return True #Horizontal
-        if tablero[0][i] == tablero[1][i] == tablero[2][i]:
+        if tablero[0][i] == tablero[1][i] == tablero[2][i] != '':
             return True #Vertical
     #Diagonal
     if tablero[0][0] == tablero[1][1] == tablero[2][2] != '':
@@ -79,7 +79,7 @@ while not game_over:
                     tablero[fila][col] = turno
                     fin_juego = verificar_ganador()
                     if fin_juego:
-                        print("El jugador", turno, "Ha ganado!")
+                        print("El jugador (", turno, ") Ha ganado!")
                         game_over = True
                     turno = 'O' if turno == 'X' else 'X'    #Condicional Ternario, Cambio de Turno
     graficar_board()
